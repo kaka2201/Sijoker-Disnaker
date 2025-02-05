@@ -64,3 +64,27 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Penamaan Branch
+Buat branch baru ketika ingin menggerjakan sebuah fitur atau memperbaiki bug dll, agar tidak terjadi konflik 😁
+
+1. feature/<nama_fitur>
+    Branch yang dibuat untuk mengembangkan fitur baru. Nama branch ini biasanya diawali dengan feature/, diikuti dengan nama fitur yang sedang dikembangkan. Contoh: feature/login-system.
+
+2. bugfix/<nama_bug>
+    Branch untuk memperbaiki bug atau masalah tertentu. Nama branch biasanya diawali dengan bugfix/ diikuti dengan deskripsi bug yang diperbaiki.
+
+3. hotfix/<nama_fix>
+    Digunakan untuk memperbaiki masalah kritis di kode yang ada di main atau master. Hotfix biasanya bersifat darurat dan memerlukan perubahan cepat.
+
+4. release/<versi>
+    Branch yang digunakan untuk persiapan rilis baru. Pada branch ini, hanya dilakukan perbaikan bug minor atau penyesuaian dokumentasi.
+
+5. experiment/<nama_experimen>
+    Digunakan untuk eksperimen atau percobaan kode, seperti mencoba fitur baru atau perubahan besar. Ini memungkinkan pengembang mengerjakan ide tanpa mempengaruhi kode utama.
+
+6. develop
+    Digunakan untuk pengembangan fitur atau perbaikan bug secara keseluruhan. Kode yang ada di branch ini bisa jadi belum stabil dan sering menjadi tempat pengembangan aktif sebelum siap digabungkan ke main atau master.
+
+7. staging
+    Digunakan sebagai area pengujian kode sebelum dipindahkan ke main. Tidak semua proyek menggunakan branch ini, tetapi ini sering dipakai untuk menguji integrasi antara beberapa fitur yang digabungkan.
