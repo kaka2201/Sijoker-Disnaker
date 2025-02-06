@@ -26,25 +26,27 @@
                     </thead>
                     <tbody>
                         @foreach($users as $user)
-                        <tr>
-                            <td>{{ $user->id }}</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>
-                                <span class="badge {{ $user->role === 'admin' ? 'bg-success' : 'bg-secondary' }}">
-                                    {{ ucfirst($user->role) }}
-                                </span>
-                            </td>
-                            <td>
-                                <form action="{{ route('admin.change_role', $user->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn {{ $user->role === 'user' ? 'btn-outline-success' : 'btn-outline-warning' }}">
-                                        {{ $user->role === 'user' ? 'Jadikan Admin' : 'Jadikan User' }}
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                            {{-- @if ($user->hasRole('user')) --}}
+                            <tr>
+                                <td>{{ $user->id }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>
+                                    <span class="badge {{ $user->hasRole('admin')||$user->hasRole('super_admin') ? 'bg-success' : 'bg-secondary' }}">
+                                        {{ ucfirst($user->roles->first()->name) }}
+                                    </span> 
+                                </td>
+                                <td>
+                                    <form action="{{ route('admin.change_role', $user->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn {{ $user->hasRole('user') ? 'btn-outline-success' : 'btn-outline-warning' }}">
+                                            {{ $user->hasRole('user') ? 'Jadikan Admin' : 'Jadikan User' }}
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {{-- @endif --}}
                         @endforeach
                     </tbody>
                 </table>

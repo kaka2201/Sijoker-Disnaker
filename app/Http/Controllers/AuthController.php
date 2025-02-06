@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,21 +30,21 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-
+    
         // Coba melakukan login dengan kredensial
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate(); // Regenerasi session untuk keamanan
-
-            $role = Auth::user()->role; // Ambil role pengguna yang login
-
+        
+            $user = Auth::user(); // Ambil role pengguna yang login
+        
             // Redirect sesuai role
-            if ($role === 'admin') {
+            if ($user->hasRole('admin') || $user->hasRole('super_admin')) {
                 return redirect()->intended('/admin/dashboard');
             } else {
                 return redirect()->intended('/'); // Redirect ke homepage jika user biasa
             }
         }
-
+    
         // Jika kredensial salah, redirect dengan pesan error
         return redirect()->route('login')
                          ->withErrors(['email' => 'Email atau kata sandi salah.'])
@@ -65,14 +66,18 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            // Role secara default sudah 'user' karena ada di migration
+        ]);
+        $user->assignRole('user');
+
+        $profile = Profile::create([
+            'user_id'=>$user->id,
+            'name'=>$user->name,
         ]);
 
-        // Login user setelah registrasi
         Auth::login($user);
 
         // Pengalihan berdasarkan role
-        if ($user->role === 'admin') {
+        if ($user->hasRole('admin') || $user->hasRole('super_admin')) {
             return redirect('/admin/dashboard');
         } else {
             return redirect('/');

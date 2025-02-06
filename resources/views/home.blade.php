@@ -2,13 +2,13 @@
 
 @section('title', 'Dinas Tenaga Kerja Kota Batu - Pelatihan Tenaga Kerja')
 
-@section('content')
+@push('styles')
     <!-- Custom CSS -->
     <style>
-        body {
+        /* body {
             font-family: 'Poppins', sans-serif;
             color: #333;
-        }
+        } */
         .bg-gradient-primary {
             background-color: #FFFFFF; /* Mengubah latar belakang menjadi putih */
         }
@@ -105,6 +105,8 @@
             }
         }
     </style>
+@endpush
+@section('content')
 
     <!-- Header Start -->
         <div class="bg-gradient-primary py-5">

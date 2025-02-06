@@ -13,11 +13,14 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        // Mengambil data pengguna dengan profile
-        $users = User::with('profile')->where('role', 'user')->get();
+        // Mengambil data user dengan profile
+        $users = User::with('profile')->get();
 
-        // Menghitung jumlah pencaker (pengguna dengan role 'user')
-        $pencakerCount = User::where('role', 'user')->count();
+        // Filter user yang memiliki role 'user'
+        $users = $users->filter(fn($user) => $user->hasRole('user'));
+
+        // Menghitung jumlah pengguna dengan role 'user'
+        $pencakerCount = User::role('user')->count();
 
         // Menghitung jumlah pelatihan yang tersedia
         $trainingCount = Training::count();
@@ -26,27 +29,26 @@ class AdminController extends Controller
         $desaTertinggi = Profile::select('desa')
             ->selectRaw('count(*) as total_peserta')
             ->groupBy('desa')
-            ->orderByRaw('total_peserta DESC')
+            ->orderByDesc('total_peserta')
             ->first();
 
-        // Ambil data desa dan jumlah profil per desa untuk ditampilkan di diagram batang
+        // Data desa untuk diagram batang
         $desaData = Profile::select('desa', DB::raw('count(*) as total'))
             ->groupBy('desa')
             ->get();
 
-        // Ambil data kecamatan dan jumlah profil per kecamatan untuk ditampilkan di diagram batang
+        // Data kecamatan untuk diagram batang
         $kecamatanData = Profile::select('kecamatan', DB::raw('count(*) as total'))
             ->groupBy('kecamatan')
             ->get();
 
-        // Menghitung jumlah peserta per pelatihan dari tabel registrations
-        $trainingParticipants = DB::table('trainings')
-            ->leftJoin('registrations', 'trainings.id', '=', 'registrations.training_id')
+        // Menghitung jumlah peserta per pelatihan
+        $trainingParticipants = Training::leftJoin('registrations', 'trainings.id', '=', 'registrations.training_id')
             ->select('trainings.title', DB::raw('COUNT(registrations.user_id) as total_peserta'))
             ->groupBy('trainings.title')
             ->get();
 
-        // Kirim semua data ke view dashboard
+        // Kirim data ke view dashboard
         return view('admin.dashboard', compact(
             'users', 
             'pencakerCount', 

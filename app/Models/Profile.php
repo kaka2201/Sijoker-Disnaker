@@ -8,9 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Profile extends Model
 {
     use HasFactory;
-
-    // Tambahkan atribut yang sesuai dengan tabel profile
-    protected $table = 'profile'; // Nama tabel di database
     protected $fillable = [
         'user_id', 'name', 'nik', 'ttl', 'gender', 'kecamatan', 'desa', 'jalan', 'pendidikan', 'nomor', 'foto'
     ];

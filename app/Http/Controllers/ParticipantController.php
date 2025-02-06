@@ -17,7 +17,10 @@ class ParticipantController extends Controller
     // Menampilkan daftar peserta
     public function index(Request $request)
     {
-        $query = User::with('profile')->where('role', 'user');
+        $query = User::with('profile')
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'user');
+            });
 
         // Filter berdasarkan universal search di semua kolom
         if ($request->filled('universal_search')) {

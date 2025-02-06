@@ -101,7 +101,7 @@
         </form>
 
         <div class="profile-icon" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{ asset('assets/admin.ico') }}" alt="Profile Image" style="width: 30px; height: 30px;">
+            <img src="{{ asset('image/default_profile.jpg') }}" alt="Profile Image" class="img-fluid rounded-circle" style="width: 30px; height: 30px; object-fit: cover; border: 1px solid #013e7e;">
         </div>
         <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="#">Profile</a></li>

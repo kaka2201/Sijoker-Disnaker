@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');  // Relasi ke tabel users
             $table->string('name');
-            $table->string('nik', 16);
-            $table->date('ttl');  // Tanggal lahir
-            $table->enum('gender', ['pria', 'wanita']);
-            $table->string('kecamatan');
-            $table->string('desa');
-            $table->string('jalan');
-            $table->string('pendidikan');
-            $table->string('nomor', 15);
+            $table->string('nik', 16)->nullable();
+            $table->date('ttl')->nullable();  // Tanggal lahir
+            $table->enum('gender', ['pria', 'wanita'])->nullable();
+            $table->string('kecamatan')->nullable();
+            $table->string('desa')->nullable();
+            $table->string('jalan')->nullable();
+            $table->string('pendidikan')->nullable();
+            $table->string('nomor', 15)->nullable();
             $table->string('foto')->nullable();  // Kolom untuk menyimpan path file foto
             $table->timestamps();
 

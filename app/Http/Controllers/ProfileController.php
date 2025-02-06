@@ -11,6 +11,7 @@ use App\Models\Revision;
 use App\Models\Registration; 
 use App\Models\Training;
 use App\Models\WithdrawalReason; // Pastikan model ini sudah ada
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -91,6 +92,10 @@ class ProfileController extends Controller
         ]));
 
         if ($request->hasFile('foto')) {
+            if (!empty($profile->foto) && Storage::disk('public')->exists($profile->foto)) {
+                Storage::disk('public')->delete( $profile->foto);
+            }
+
             $file = $request->file('foto');
             $path = $file->store('profile_pictures', 'public');
             $profile->foto = $path;
@@ -98,7 +103,7 @@ class ProfileController extends Controller
 
         $profile->save();
 
-        return redirect()->route('profile')->with('success', 'Profil berhasil disimpan.');
+        return redirect()->back()->with('success', 'Profil berhasil disimpan.');
     }
 
     // Menyimpan atau memperbarui dokumen

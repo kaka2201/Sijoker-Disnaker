@@ -81,6 +81,7 @@
             align-items: center;
         }
     </style>
+    @stack('styles')
 </head>
 
 <body>
@@ -131,7 +132,7 @@
                 <div class="navbar-nav mx-auto py-0">
                     <a href="{{ url('/') }}" class="nav-item nav-link {{ Request::is('/') ? 'active text-primary' : '' }}">Home</a>
                     <a href="{{ url('about') }}" class="nav-item nav-link {{ Request::is('about') ? 'active text-primary' : '' }}">About</a>
-                    <a href="{{ route('course') }}" class="nav-item nav-link {{ Request::routeIs('course') ? 'active text-primary' : '' }}">Courses</a>
+                    <a href="{{ route('courses.index') }}" class="nav-item nav-link {{ Request::routeIs('courses.index') ? 'active text-primary' : '' }}">Courses</a>
                     <a href="{{ url('contact') }}" class="nav-item nav-link {{ Request::is('contact') ? 'active text-primary' : '' }}">Contact</a>
                 </div>
                 <div class="d-none d-lg-block">
@@ -141,10 +142,10 @@
                     @else
                         <div class="dropdown">
                             <button class="profile-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ Auth::user()->profile && Auth::user()->profile->foto ? asset('storage/' . Auth::user()->profile->foto) : asset('default-profile.png') }}" alt="Profile Image" class="profile-image">
+                                <img src="{{ Auth::user()->profile && Auth::user()->profile->foto ? asset('storage/' . Auth::user()->profile->foto) : asset('image/default_profile.jpg') }}" alt="Profile Image" class="profile-image" style="border: 1px solid #013e7e;"">
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="{{ route('profile') }}">Profile</a>
+                                <a class="dropdown-item" href="{{ route('profile.index') }}">Profile</a>
                                 <a class="dropdown-item" href="#">Settings</a>
                                 <div class="dropdown-divider"></div>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: inline;">
