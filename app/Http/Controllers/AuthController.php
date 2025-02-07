@@ -60,24 +60,31 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-
-        // Membuat user baru dengan data yang divalidasi
+    
+        // Membuat user baru
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
+        
+        // Assign role ke user
         $user->assignRole('user');
-
-        $profile = Profile::create([
-            'user_id'=>$user->id,
-            'name'=>$user->name,
+    
+        // Membuat profile
+        Profile::create([
+            'user_id' => $user->id,
+            'name' => $user->name,
         ]);
-
+    
+        // Login user
         Auth::login($user);
-
+    
+        // Ambil user yang sedang login
+        $auth = Auth::user();
+    
         // Pengalihan berdasarkan role
-        if ($user->hasRole('admin') || $user->hasRole('super_admin')) {
+        if ($auth->hasRole('admin') || $auth->hasRole('super_admin')) {
             return redirect('/admin/dashboard');
         } else {
             return redirect('/');
