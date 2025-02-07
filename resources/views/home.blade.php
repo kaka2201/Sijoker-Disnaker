@@ -5,10 +5,6 @@
 @push('styles')
     <!-- Custom CSS -->
     <style>
-        /* body {
-            font-family: 'Poppins', sans-serif;
-            color: #333;
-        } */
         .bg-gradient-primary {
             background-color: #FFFFFF; /* Mengubah latar belakang menjadi putih */
         }
@@ -223,7 +219,7 @@
                             </p>
                             <div class="mt-auto">
                                 <div class="position-absolute bottom-0 end-0 p-3">
-                                    <a href="{{ route('course') }}" class="btn btn-outline-info btn-sm rounded-pill">Detail</a>
+                                    <a href="{{ route('courses.index') }}" class="btn btn-outline-info btn-sm rounded-pill">Detail</a>
                                     <a href="{{ route('pelatihan.preview', $training->id) }}" class="btn btn-outline-success btn-sm rounded-pill btn-glow">Daftar</a>
                                 </div>
                             </div>

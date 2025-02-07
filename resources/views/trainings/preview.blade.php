@@ -77,7 +77,7 @@
                     <div class="d-flex flex-column align-items-start">
                         <p>Data Belum Sesuai?</p>
                         <!-- Tombol Edit Profile -->
-                        <a href="{{ route('profile') }}" class="btn btn-warning">Edit Profil</a>
+                        <a href="{{ route('profile.index') }}" class="btn btn-warning">Edit Profil</a>
                     </div>
                     
                     <!-- Tombol Konfirmasi Daftar -->

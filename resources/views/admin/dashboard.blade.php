@@ -7,14 +7,14 @@
     <div class="row g-4">
         <!-- Welcome Card -->
         <div class="col-md-6 col-lg-4">
-            <div class="card bg-primary text-white h-100">
+            <div class="card bg-primary text-white h-100 shadow-lg border-0">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <div>
                         <h4 class="card-title mb-3">Selamat Datang, {{ Auth::user()->name }} 🎉</h4>
                         <p class="card-text" id="real-time-clock"></p>
                     </div>
                     <div class="mt-4">
-                        <a href="#" class="btn btn-light">View Profile</a>
+                        <a href="#" class="btn btn-light btn-sm">View Profile</a>
                     </div>
                 </div>
             </div>
@@ -23,31 +23,33 @@
         <!-- Statistics Cards -->
         <div class="col-md-6 col-lg-8">
             <div class="row g-4">
-                <!-- Pencaker Aktif -->
                 <div class="col-sm-4">
-                    <div class="card bg-info text-white h-100">
-                        <div class="card-body">
+                    <div class="card bg-info text-white h-100 shadow-sm border-0">
+                        <div class="card-body text-center">
+                            <i class="fas fa-users fa-3x mb-2"></i>
                             <h5 class="card-title">Peserta Aktif</h5>
-                            <h2 class="display-4 mb-0">{{ $pencakerCount }}</h2>
+                            <h2 class="display-4 fw-bold">{{ $pencakerCount }}</h2>
                         </div>
                     </div>
                 </div>
-                <!-- Pelatihan Tersedia -->
+
                 <div class="col-sm-4">
-                    <div class="card bg-success text-white h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Pelatihan Tersedia</h5>
-                            <h2 class="display-4 mb-0">{{ $trainingCount }}</h2>
+                    <div class="card bg-success text-white h-100 shadow-sm border-0">
+                        <div class="card-body text-center">
+                            <i class="fas fa-book-open fa-3x mb-2"></i>
+                            <h5 class="card-title">Pelatihan</h5>
+                            <h2 class="display-4 fw-bold">{{ $trainingCount }}</h2>
                         </div>
                     </div>
                 </div>
-                <!-- Desa Tingkat Tertinggi -->
+
                 <div class="col-sm-4">
-                    <div class="card bg-warning text-dark h-100">
-                        <div class="card-body d-flex flex-column justify-content-between">
-                            <h5 class="card-title">Desa Dengan Peserta Tertinggi</h5>
+                    <div class="card bg-warning text-dark h-100 shadow-sm border-0">
+                        <div class="card-body text-center">
+                            <i class="fas fa-map-marker-alt fa-3x mb-2"></i>
+                            <h5 class="card-title">Desa Terbanyak</h5>
                             @if($desaTertinggi)
-                                <h2 class="fw-bold mb-1">{{ $desaTertinggi->desa }}</h2>
+                                <h2 class="fw-bold mb-1">{{ $desaTertinggi->desa ? $desaTertinggi->desa : 'Unknown' }}</h2>
                                 <p class="h4 mb-0">{{ $desaTertinggi->total_peserta }} Peserta</p>
                             @else
                                 <h2 class="fw-bold mb-1">Tidak Ada Data</h2>
@@ -58,19 +60,19 @@
             </div>
         </div>
 
-        <!-- Peserta Per Desa & Kecamatan -->
+        <!-- Data Peserta -->
         <div class="col-12 mt-4">
-            <div class="card shadow">
-                <div class="card-header bg-light">
+            <div class="card shadow border-0">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Jumlah Peserta Per Desa dan Kecamatan</h5>
+                    <i class="fas fa-chart-bar fa-lg text-primary"></i>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <!-- Peserta Per Desa -->
                         <div class="col-md-6">
-                            <h6>Jumlah Peserta Per Desa</h6>
-                            <table class="table table-bordered">
-                                <thead>
+                            <h6 class="text-primary">Jumlah Peserta Per Desa</h6>
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-primary">
                                     <tr>
                                         <th>Desa</th>
                                         <th>Jumlah Peserta</th>
@@ -79,7 +81,7 @@
                                 <tbody>
                                     @foreach($desaData as $desa)
                                         <tr>
-                                            <td>{{ $desa->desa }}</td>
+                                            <td>{{ $desa->desa ? $desa->desa : 'Unknown' }}</td>
                                             <td>{{ $desa->total }}</td>
                                         </tr>
                                     @endforeach
@@ -87,11 +89,10 @@
                             </table>
                         </div>
 
-                        <!-- Peserta Per Kecamatan -->
                         <div class="col-md-6">
-                            <h6>Jumlah Peserta Per Kecamatan</h6>
-                            <table class="table table-bordered">
-                                <thead>
+                            <h6 class="text-success">Jumlah Peserta Per Kecamatan</h6>
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-success">
                                     <tr>
                                         <th>Kecamatan</th>
                                         <th>Jumlah Peserta</th>
@@ -100,7 +101,7 @@
                                 <tbody>
                                     @foreach($kecamatanData as $kecamatan)
                                         <tr>
-                                            <td>{{ $kecamatan->kecamatan }}</td>
+                                            <td>{{ $kecamatan->kecamatan ? $kecamatan->kecamatan : 'Unknown' }}</td>
                                             <td>{{ $kecamatan->total }}</td>
                                         </tr>
                                     @endforeach
@@ -112,15 +113,16 @@
             </div>
         </div>
 
-        <!-- Jumlah Peserta Per Pelatihan -->
+        <!-- Peserta Per Pelatihan -->
         <div class="col-12 mt-4">
-            <div class="card shadow">
-                <div class="card-header bg-light">
+            <div class="card shadow border-0">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Jumlah Peserta Per Pelatihan</h5>
+                    <i class="fas fa-graduation-cap fa-lg text-info"></i>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-info">
                             <tr>
                                 <th>Pelatihan</th>
                                 <th>Jumlah Peserta</th>
@@ -134,7 +136,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="2" class="text-center">Belum ada peserta yang terdaftar di pelatihan ini.</td>
+                                <td colspan="2" class="text-center">Belum ada peserta yang terdaftar.</td>
                             </tr>
                         @endforelse
                         </tbody>
@@ -146,7 +148,7 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     function updateClock() {
@@ -159,4 +161,4 @@
     setInterval(updateClock, 1000);
     $(document).ready(updateClock);
 </script>
-@endsection
+@endpush

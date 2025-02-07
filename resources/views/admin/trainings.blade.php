@@ -3,11 +3,15 @@
 @section('title', 'Manajemen Pelatihan')
 
 @section('content')
-<div class="container">
-    <h1>Manajemen Pelatihan</h1>
+<div class="container my-5">
+    <h1 class="mb-4 text-center">Manajemen Pelatihan</h1>
 
     <!-- Tombol untuk menambah pelatihan baru -->
-    <a href="{{ route('trainings.create') }}" class="btn btn-primary mb-3">Tambah Pelatihan</a>
+    <div class="text-end mb-3">
+        <a href="{{ route('trainings.create') }}" class="btn btn-primary">
+            <i class="fa fa-plus"></i> Tambah Pelatihan
+        </a>
+    </div>
 
     <!-- Jika ada pesan sukses -->
     @if (session('success'))
@@ -17,57 +21,47 @@
     <div class="row">
         @foreach($trainings as $training)
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <!-- Gambar dari database, gunakan placeholder jika tidak ada gambar -->
-                    @if($training->image)
-                        <!-- Pastikan menggunakan path storage yang benar -->
-                        <img src="{{ asset('storage/' . $training->image) }}" class="card-img-top" alt="{{ $training->title }}" style="height: 200px; object-fit: cover;">
-                    @else
-                        <img src="{{ asset('images/training-default.jpg') }}" class="card-img-top" alt="{{ $training->title }}" style="height: 200px; object-fit: cover;">
-                    @endif
+                <div class="card shadow-sm h-100 border-0">
+                    <!-- Gambar dari database atau placeholder -->
+                    <img src="{{ $training->image ? asset('storage/' . $training->image) : asset('images/training-default.jpg') }}" 
+                         class="card-img-top rounded-top" 
+                         alt="{{ $training->title }}" 
+                         style="height: 200px; object-fit: cover;">
 
-                    <div class="card-body">
-                        <!-- Judul pelatihan -->
-                        <h5 class="card-title">{{ $training->title }}</h5>
-
-                        <!-- Deskripsi pelatihan dengan batas karakter -->
-                        <p class="card-text">{{ Str::limit($training->description, 100) }}</p>
-
-                        <!-- Informasi tambahan -->
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">{{ $training->title }}</h5>
+                        <p class="card-text text-muted">{{ Str::limit($training->description, 100) }}</p>
                         <p class="card-text">
-                            <strong>Tanggal Mulai: </strong>{{ \Carbon\Carbon::parse($training->start_date)->format('d-m-Y') }} {{ \Carbon\Carbon::parse($training->start_time)->format('H:i') }}<br>
+                            <small><i class="fa fa-calendar"></i> {{ \Carbon\Carbon::parse($training->start_date)->format('d-m-Y H:i') }}</small><br>
                             @if ($training->end_date)
-                                <strong>Tanggal Selesai: </strong>{{ \Carbon\Carbon::parse($training->end_date)->format('d-m-Y') }} {{ \Carbon\Carbon::parse($training->end_time)->format('H:i') }}<br>
+                                <small><i class="fa fa-calendar-check"></i> {{ \Carbon\Carbon::parse($training->end_date)->format('d-m-Y H:i') }}</small><br>
                             @endif
-                            <strong>Kapasitas: </strong>{{ $training->capacity }} peserta<br>
-                            <strong>Lokasi: </strong>{{ $training->location }}
+                            <small><i class="fa fa-users"></i> Kapasitas: {{ $training->capacity }} peserta</small><br>
+                            <small><i class="fa fa-map-marker-alt"></i> {{ $training->location }}</small>
                         </p>
 
-                        <!-- Tombol Edit yang mengarah ke halaman edit terpisah -->
-                        <a href="{{ route('trainings.edit', $training->id) }}" class="btn btn-warning btn-sm">
-                            Edit Pelatihan
-                        </a>
-
-                        <!-- Tombol Lihat Peserta yang mengarah ke halaman peserta pelatihan -->
-                        <a href="{{ route('trainings.participants', $training->id) }}" class="btn btn-info btn-sm">
-                            Lihat Peserta
-                        </a>
-
-                        <!-- Tombol Hapus -->
-                        <form action="{{ route('trainings.destroy', $training->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pelatihan ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                Hapus Pelatihan
-                            </button>
-                        </form>
+                        <div class="mt-auto">
+                            <a href="{{ route('trainings.edit', $training->id) }}" class="btn btn-warning btn-sm me-1">
+                                <i class="fa fa-edit"></i> Edit
+                            </a>
+                            <a href="{{ route('trainings.participants', $training->id) }}" class="btn btn-info btn-sm me-1">
+                                <i class="fa fa-users"></i> Peserta
+                            </a>
+                            <form action="{{ route('trainings.destroy', $training->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus pelatihan ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-trash"></i> Hapus
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
 
-    <!-- Pagination untuk menampilkan lebih dari 9 pelatihan -->
+    <!-- Pagination -->
     <div class="d-flex justify-content-center mt-4">
         {{ $trainings->links() }}
     </div>

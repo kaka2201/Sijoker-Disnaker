@@ -3,7 +3,7 @@
 @section('title', 'Tambah Pelatihan')
 
 @section('content')
-<div class="container">
+<div class="container my-5">
     <h1>Tambah Pelatihan</h1>
 
     <form action="{{ route('trainings.store') }}" method="POST" enctype="multipart/form-data">

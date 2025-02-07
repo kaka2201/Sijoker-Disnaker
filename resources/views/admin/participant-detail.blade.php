@@ -14,7 +14,7 @@
                     <div class="row g-0">
                         <div class="col-md-4 bg-light text-center">
                             <div class="p-5">
-                                <img src="{{ $participant->foto ? asset('storage/' . $participant->foto) : asset('default-profile.png') }}" alt="Foto Profil" class="img-fluid rounded-circle mb-4 border" style="width: 180px; height: 180px; object-fit: cover;">
+                                <img src="{{ Auth::user()->profile && Auth::user()->profile->foto ? asset('storage/' . Auth::user()->profile->foto) : asset('image/default_profile.jpg') }}" alt="Foto Profil" class="img-fluid rounded-circle mb-4" style="border: 3px solid #013e7e; width: 180px; height: 180px; object-fit: cover;">
                                 <h3 class="text-dark mb-2">{{ $participant->name }}</h3>
                                 <p class="text-muted mb-4">{{ $participant->email }}</p>
                             </div>

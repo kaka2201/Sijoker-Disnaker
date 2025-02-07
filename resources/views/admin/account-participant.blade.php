@@ -1,21 +1,22 @@
 @extends('layouts.adminapp')
 
 @section('content')
-<div class="container my-5">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="mb-4 text-center">Manajemen Akun Peserta</h1>
-
+<div class="container-fluid px-4 py-5">
+    <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="fas fa-users"></i> Manajemen Akun Peserta</h4>
+        </div>
+        
+        <div class="card-body">
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-
             <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead class="table-blue">
+                <table class="table table-hover align-middle table-bordered">
+                    <thead class="table-primary text-center">
                         <tr>
                             <th>ID</th>
                             <th>Nama</th>
@@ -32,9 +33,13 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>
-                                    <span class="badge {{ $user->hasRole('admin')||$user->hasRole('super_admin') ? 'bg-success' : 'bg-secondary' }}">
-                                        {{ ucfirst($user->roles->first()->name) }}
-                                    </span> 
+                                    @php
+                                        $role = $user->roles->first();
+                                    @endphp
+                                
+                                    <span class="badge {{ $role && ($user->hasRole('admin') || $user->hasRole('super_admin')) ? 'bg-success' : 'bg-secondary' }}">
+                                        {{ $role ? ucfirst($role->name) : 'No Role' }}
+                                    </span>
                                 </td>
                                 <td>
                                     <form action="{{ route('admin.change_role', $user->id) }}" method="POST" class="d-inline">

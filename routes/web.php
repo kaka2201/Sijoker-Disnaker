@@ -23,12 +23,13 @@ Route::middleware('auth')->prefix('profile')->name('profile.')->controller(Profi
     Route::get('/documents', 'showDocuments')->name('documents');
     Route::get('/change-password', 'showChangePassword')->name('change-password');
     Route::put('/update-password', 'updatePassword')->name('update-password');
-    Route::get('/preview', 'showPreview')->name('preview');
+    Route::get('/preview', 'preview')->name('preview');
     Route::put('/update', 'updateProfile')->name('update');
     Route::post('/store', 'storeProfile')->name('store');
     Route::post('/storeOrUpdate', 'storeOrUpdateProfile')->name('storeOrUpdate');
     Route::post('/documents/storeOrUpdate', 'storeOrUpdateDocuments')->name('documents.storeOrUpdate');
     Route::get('/{user}', 'show')->name('show');
+
 });
 
 Route::middleware(['auth', 'role:super_admin|admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -38,6 +39,7 @@ Route::middleware(['auth', 'role:super_admin|admin'])->prefix('admin')->name('ad
     Route::get('/trainings', [TrainingController::class, 'index'])->name('training_management');
     Route::patch('/participant/{id}/change-role', [AdminController::class, 'changeRole'])->name('change_role');
 
+    Route::get('/participant/{id}', [ParticipantController::class, 'show'])->name('participant.show');
     Route::delete('/participant/{id}/delete', [ParticipantController::class, 'destroy'])->name('participant.destroy');
     Route::get('/remove-participant/{userId}', [AdminController::class, 'showRemovalForm'])->name('removeParticipantForm');
     Route::post('/remove-participant/{userId}', [AdminController::class, 'removeParticipant'])->name('removeParticipant');
@@ -56,6 +58,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/trainings/{id}/process', [TrainingController::class, 'processRegistration'])->name('trainings.process');
     Route::get('/trainings/{id}/participants', [TrainingController::class, 'showParticipants'])->name('trainings.participants');
     Route::post('/profile/training/withdraw/{trainingId}', [ProfileController::class, 'withdraw'])->name('training.withdraw');
+    Route::get('/training-participants', [TrainingController::class, 'showTrainingParticipants'])->name('training.participants');
+    
 });
 
 Route::controller(CourseController::class)->group(function () {
@@ -75,4 +79,13 @@ Route::middleware('auth')->prefix('participants')->name('participant.')->control
     Route::post('/document/{id}/{type}/revision', 'markAsRevision')->name('document.revision');
     Route::post('/{id}/send-revision', 'sendRevision')->name('sendRevision');
     Route::get('/export', 'export')->name('export');
+
+    Route::get('/{user_id}/confirm-delete', [ParticipantController::class, 'confirmDelete'])->name('confirmDelete');
+    Route::post('/participants/{user_id}/delete', [ParticipantController::class, 'deleteParticipant'])->name('delete');
+});
+
+Route::middleware('auth')->prefix('pelatihan')->name('pelatihan.')->controller(TrainingController::class)->group(function () {
+    Route::get('/{id}/preview',  'preview')->name('preview');
+    Route::post('/{id}/daftar',  'register')->name('register');
+    Route::get('/check-completion', 'checkProfileCompletion')->name('checkCompletion');
 });

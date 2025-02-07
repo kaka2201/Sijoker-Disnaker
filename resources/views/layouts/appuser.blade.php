@@ -23,7 +23,7 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
@@ -32,6 +32,11 @@
     <title>@yield('title', 'Your App') ~ Platform Pelatihan Kerja Disnaker</title>
 
     <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            color: #333;
+        }
         .btn-secondary {
             background-color: #6c757d;
             border-color: #6c757d;
@@ -80,14 +85,37 @@
             display: flex;
             align-items: center;
         }
+        html {
+            scroll-behavior: smooth;
+        }
+        .topbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #343a40;
+            color: white;
+            z-index: 1030;
+            transition: transform 0.3s ease-in-out;
+        }
+        .navbar {
+            position: fixed;
+            width: 100%;
+            top: 40px;
+            background: white;
+            z-index: 1040;
+            transition: top 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .content {
+            margin-top: 120px; /* Agar konten tidak tertutup navbar */
+        }
     </style>
     @stack('styles')
 </head>
 
 <body>
-
     <!-- Topbar Start -->
-    <div class="container-fluid bg-dark">
+    <div class="container-fluid bg-dark topbar">
         <div class="row py-2 px-lg-5">
             <div class="col-lg-6 text-left text-lg-left mb-2 mb-lg-0">
                 <div class="d-inline-flex align-items-center text-white">
@@ -98,30 +126,21 @@
             </div>
             <div class="col-lg-6 text-right text-lg-right">
                 <div class="d-inline-flex align-items-center">
-                    <a class="text-white px-2" href="">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a class="text-white px-2" href="">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a class="text-white px-2" href="">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a class="text-white px-2" href="">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a class="text-white pl-2" href="">
-                        <i class="fab fa-youtube"></i>
-                    </a>
+                    <a class="text-white px-2" href=""><i class="fab fa-facebook-f"></i></a>
+                    <a class="text-white px-2" href=""><i class="fab fa-twitter"></i></a>
+                    <a class="text-white px-2" href=""><i class="fab fa-linkedin-in"></i></a>
+                    <a class="text-white px-2" href=""><i class="fab fa-instagram"></i></a>
+                    <a class="text-white pl-2" href=""><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
         </div>
     </div>
     <!-- Topbar End -->
-
+    
+    
     <!-- Navbar Start -->
     <div class="container-fluid p-0">
-        <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
+        <nav class="navbar navbar-expand-lg navbar-light py-3 py-lg-0 px-lg-5">
             <a href="{{ url('/') }}" class="navbar-brand ml-lg-3">
                 <h1 class="m-0 text-uppercase text-primary"><i class="fa fa-book-reader mr-3"></i>Disnaker</h1>
             </a>
@@ -135,31 +154,32 @@
                     <a href="{{ route('courses.index') }}" class="nav-item nav-link {{ Request::routeIs('courses.index') ? 'active text-primary' : '' }}">Courses</a>
                     <a href="{{ url('contact') }}" class="nav-item nav-link {{ Request::is('contact') ? 'active text-primary' : '' }}">Contact</a>
                 </div>
-                <div class="d-none d-lg-block">
-                    @guest
-                        <a href="{{ route('register') }}" class="btn btn-primary py-2 px-4 mr-2">Register</a>
-                        <a href="{{ route('login') }}" class="btn btn-primary py-2 px-4">Login</a>
-                    @else
-                        <div class="dropdown">
-                            <button class="profile-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ Auth::user()->profile && Auth::user()->profile->foto ? asset('storage/' . Auth::user()->profile->foto) : asset('image/default_profile.jpg') }}" alt="Profile Image" class="profile-image" style="border: 1px solid #013e7e;"">
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="{{ route('profile.index') }}">Profile</a>
-                                <a class="dropdown-item" href="#">Settings</a>
-                                <div class="dropdown-divider"></div>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">Logout</button>
-                                </form>
-                            </div>
+            </div>
+            <div class="d-none d-lg-block">
+                @guest
+                    <a href="{{ route('register') }}" class="btn btn-primary py-2 px-4 mr-2">Register</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary py-2 px-4">Login</a>
+                @else
+                    <div class="dropdown">
+                        <button class="profile-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{{ Auth::user()->profile && Auth::user()->profile->foto ? asset('storage/' . Auth::user()->profile->foto) : asset('image/default_profile.jpg') }}" alt="Profile Image" class="profile-image" style="border: 1px solid #013e7e;">
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{{ route('profile.index') }}">Profile</a>
+                            <a class="dropdown-item" href="#">Settings</a>
+                            <div class="dropdown-divider"></div>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Logout</button>
+                            </form>
                         </div>
-                    @endguest
-                </div>
+                    </div>
+                @endguest
             </div>
         </nav>
     </div>
     <!-- Navbar End -->
+
 
     <!-- Page Content -->
     <div class="content">
@@ -229,7 +249,7 @@
     <!-- Footer End -->
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary rounded-0 btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+    <a href="#" class="btn btn-lg btn-primary rounded-100 btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -241,9 +261,42 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let topbar = document.querySelector(".topbar");
+            let navbar = document.querySelector(".navbar");
+            let lastScrollY = window.scrollY;
+            let ticking = false;
 
+            function updateNavbar() {
+                if (window.scrollY > 50) {
+                    topbar.style.transform = "translateY(-100%)";
+                    navbar.style.top = "0";
+                    navbar.style.boxShadow = "0px 4px 10px rgba(0, 0, 0, 0.2)";
+                } else {
+                    topbar.style.transform = "translateY(0)";
+                    navbar.style.top = "40px";
+                    navbar.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.1)";
+                }
+                ticking = false;
+            }
+
+            window.addEventListener("scroll", function () {
+                lastScrollY = window.scrollY;
+                if (!ticking) {
+                    requestAnimationFrame(updateNavbar);
+                    ticking = true;
+                }
+            });
+
+            // Smooth Scroll for Back to Top button
+            document.querySelector(".back-to-top").addEventListener("click", function (e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 
 </html>

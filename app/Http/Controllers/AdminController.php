@@ -28,17 +28,28 @@ class AdminController extends Controller
         // Menghitung desa dengan jumlah peserta tertinggi
         $desaTertinggi = Profile::select('desa')
             ->selectRaw('count(*) as total_peserta')
+            ->join('users', 'profiles.user_id', '=', 'users.id')
+            ->whereHas('user.roles', function ($query) {
+                $query->where('name', 'user'); // Sesuaikan role
+            })
             ->groupBy('desa')
             ->orderByDesc('total_peserta')
             ->first();
 
         // Data desa untuk diagram batang
+
         $desaData = Profile::select('desa', DB::raw('count(*) as total'))
+            ->whereHas('user.roles', function ($query) {
+                $query->where('name', 'admin'); // Filter hanya yang memiliki role "admin"
+            })
             ->groupBy('desa')
             ->get();
 
         // Data kecamatan untuk diagram batang
         $kecamatanData = Profile::select('kecamatan', DB::raw('count(*) as total'))
+            ->whereHas('user.roles', function ($query) {
+                $query->where('name', 'admin'); // Filter hanya yang memiliki role "admin"
+            })
             ->groupBy('kecamatan')
             ->get();
 
@@ -84,10 +95,12 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
 
         // Mengubah role: jika 'user' maka ganti ke 'admin', jika 'admin' ganti ke 'user'
-        if ($user->role === 'user') {
-            $user->role = 'admin';
+        if ($user->hasRole('user')) {
+            $user->removeRole('user');
+            $user->assignRole('admin');
         } else {
-            $user->role = 'user';
+            $user->removeRole('admin');
+            $user->assignRole('user');
         }
 
         // Simpan perubahan role

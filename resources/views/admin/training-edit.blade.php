@@ -3,7 +3,7 @@
 @section('title', 'Edit Pelatihan')
 
 @section('content')
-<div class="container">
+<div class="container my-5">
     <h1>Edit Pelatihan</h1>
 
     <form action="{{ route('trainings.update', $training->id) }}" method="POST" enctype="multipart/form-data">
@@ -22,7 +22,7 @@
 
         <div class="form-group">
             <label for="start_date">Tanggal Mulai</label>
-            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $training->start_date }}" required>
+            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ \Carbon\Carbon::parse($training->start_date)->format('Y-m-d') }}" required>
         </div>
 
         <div class="form-group">
@@ -32,7 +32,7 @@
 
         <div class="form-group">
             <label for="end_date">Tanggal Selesai</label>
-            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $training->end_date }}">
+            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ \Carbon\Carbon::parse($training->end_date)->format('Y-m-d') }}">
         </div>
 
         <div class="form-group">

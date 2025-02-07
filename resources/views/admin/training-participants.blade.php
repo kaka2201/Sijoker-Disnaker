@@ -3,7 +3,7 @@
 @section('title', 'Manajemen Peserta Pelatihan')
 
 @section('content')
-<div class="container">
+<div class="container my-5">
     <h1>Manajemen Peserta untuk Pelatihan: {{ $training->title }}</h1>
 
     <!-- Form Pencarian Universal -->
