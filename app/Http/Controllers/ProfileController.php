@@ -128,8 +128,7 @@ class ProfileController extends Controller
 
         if ($request->hasFile('kk')) {
             $file = $request->file('kk');
-            $this->storeWithNumbering('documents/kk', 'kk_' . $user->name, $file, 'local');
-            $kkFile = 'kk_' . $user->name, $file;
+            $kkFile = $this->storeWithNumbering('documents/kk', 'kk_' . $user->name, $file, 'local');
             $document->kk = $kkFile;
             $document->kk_status = 'pending';
         }
