@@ -57,17 +57,18 @@ class ComplaintController extends Controller
             'title' => 'required',
             'question' => 'required',
         ]);
-
-        if(Auth::user()->hasRole('user')){
-            Complaint::create([
-                'questioner_id' => Auth::id(),
-                'title' => $request->title,
-                'question' => $request->question,
-            ]);
     
-            return redirect()->back()->with('success', 'Complaint submitted successfully!');
+        if (!Auth::check() || !Auth::user()->hasRole('user')) {
+            return redirect()->back()->with('error', 'You are not authorized to complain.');
         }
-        return redirect()->back()->with('error', 'You are not authorized to complaint.');
+    
+        Complaint::create([
+            'questioner_id' => Auth::id(),
+            'title' => $request->title,
+            'question' => $request->question,
+        ]);
+    
+        return redirect()->back()->with('success', 'Complaint submitted successfully!');
     }
 
     public function show($id, Request $request)
