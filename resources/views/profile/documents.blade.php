@@ -53,10 +53,10 @@
                             </div>
                         @endforeach
                     
-                        @if($document && $document->messages)
+                        @if($revision && $revision->revisi_message)
                         <div class="alert alert-warning">
                             <strong>Pesan dari Admin:</strong>
-                            <p>{{ $document->messages }}</p>
+                            <p>{{ $revision->revisi_message }}</p>
                         </div>
                         @else
                             <div class="alert alert-secondary">

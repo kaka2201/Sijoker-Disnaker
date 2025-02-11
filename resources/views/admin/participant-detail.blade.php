@@ -79,18 +79,18 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body p-0">
-                                                            <iframe src="{{ route('view.document', ['type' => $docType, 'userId' => $participant->user_id]) }}" width="100%" height="600px" class="border-0">
-                                                                <p>Dokumen tidak dapat ditampilkan. <a href="{{ route('view.document', ['type' => $docType, 'userId' => $participant->user_id]) }}" target="_blank">Download</a> dokumen.</p>
+                                                            <iframe src="{{ route('admin.participant.view.document', ['category' => $docType, 'userId' => $participant->user_id]) }}" width="100%" height="600px" class="border-0">
+                                                                <p>Dokumen tidak dapat ditampilkan. <a href="{{ route('admin.participant.view.document', ['category' => $docType, 'userId' => $participant->user_id]) }}" target="_blank">Download</a> dokumen.</p>
                                                             </iframe>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <form action="{{ route('document.confirm', ['id' => $documents->id, 'type' => $docType]) }}" method="POST" class="d-inline">
+                                                            <form action="{{ route('admin.participant.document.confirm', ['id' => $documents->id, 'type' => $docType]) }}" method="POST" class="d-inline">
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-success btn-sm">
                                                                     <i class="fas fa-check me-2"></i>Verifikasi
                                                                 </button>
                                                             </form>
-                                                            <form action="{{ route('document.reject', ['id' => $documents->id, 'type' => $docType]) }}" method="POST" class="d-inline">
+                                                            <form action="{{ route('admin.participant.document.reject', ['id' => $documents->id, 'type' => $docType]) }}" method="POST" class="d-inline">
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-danger btn-sm">
                                                                     <i class="fas fa-times me-2"></i>Tolak
@@ -106,11 +106,11 @@
 
                                         <!-- Form untuk Kirim Pesan Revisi -->
                                         <div class="mt-4">
-                                            <form action="{{ route('participant.sendRevision', $participant->user_id) }}" method="POST">
+                                            <form action="{{ route('admin.participant.sendRevision', $participant->user_id) }}" method="POST">
                                                 @csrf
                                                 <div class="mb-3">
                                                     <label for="revisiMessage" class="form-label">Pesan Revisi</label>
-                                                    <textarea class="form-control" id="revisiMessage" name="revisi_message" rows="3" required></textarea>
+                                                    <textarea class="form-control" id="revisiMessage" name="revisi_message" rows="3" required>{{ $revisi->revisi_message }}</textarea>
                                                 </div>
                                                 <button type="submit" class="btn btn-warning">
                                                     <i class="fas fa-edit"></i> Kirim Revisi
@@ -146,7 +146,7 @@
                     <button class="btn btn-outline-secondary" onclick="window.history.back()">
                         <i class="fas fa-arrow-left me-2"></i>Kembali
                     </button>
-                    <a href="{{ route('participant.confirmDelete', $participant->user_id) }}" class="btn btn-danger">
+                    <a href="{{ route('admin.participant.confirmDelete', $participant->user_id) }}" class="btn btn-danger">
                         <i class="fas fa-trash me-2"></i>Hapus Peserta
                     </a>
                 </div>

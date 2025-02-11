@@ -8,7 +8,7 @@
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0"><i class="fas fa-users"></i> Manajemen Peserta</h4>
             <div class="col-md-2 text-end">
-                <form action="{{ route('participant.export') }}" method="GET">
+                <form action="{{ route('admin.participant.export') }}" method="GET">
                     <input type="hidden" name="universal_search" value="{{ request('universal_search') }}">
                     <button type="submit" class="btn btn-success w-100">
                         <i class="fas fa-file-csv"></i> Export CSV
@@ -18,7 +18,7 @@
         </div>
         <div class="card-body">
             <!-- Search Form -->
-            <form id="filterForm" action="{{ route('participant.index') }}" method="GET" class="mb-3">
+            <form id="filterForm" action="{{ route('admin.participant.index') }}" method="GET" class="mb-3">
                 <div class="row g-3 align-items-center">
                     {{-- <label for="universal_search" class="form-label">Cari Peserta</label>
                     <div class="col-md-10">
@@ -80,7 +80,7 @@
                             <td class="text-center">{{ $participant->profile->pendidikan ?? 'N/A' }}</td>
                             <td class="text-center">{{ $participant->profile->nomor ?? 'N/A' }}</td>
                             <td class="text-center">
-                                <a href="{{ route('participant.show', $participant->id) }}" class="btn text-white btn-info btn-sm">
+                                <a href="{{ route('admin.participant.show', $participant->id) }}" class="btn text-white btn-info btn-sm">
                                     <i class="fas fa-eye"></i> Detail
                                 </a>
                             </td>

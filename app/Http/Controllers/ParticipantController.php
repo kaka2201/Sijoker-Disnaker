@@ -57,7 +57,7 @@ class ParticipantController extends Controller
 
         // Ambil dokumen yang terkait dengan user tersebut
         $documents = Document::where('user_id', $user_id)->first();
-
+        $revisi = Revision::where('user_id', $user_id)->first();
         // Ambil email dari user dan tambahkan ke participant
         $participant->email = User::where('id', $user_id)->value('email');
 
@@ -66,7 +66,7 @@ class ParticipantController extends Controller
             ->where('user_id', $user_id)
             ->get();
 
-        return view('admin.participant-detail', compact('participant', 'documents', 'registrations'));
+        return view('admin.participant-detail', compact('participant', 'documents', 'registrations','revisi'));
     }
 
     // Menghapus peserta menggunakan user_id
@@ -203,28 +203,28 @@ class ParticipantController extends Controller
     }
 
     // Melihat dokumen user tanpa mendownload
-    public function viewDocument($type, $user_id)
+    public function viewDocument($user_id, $category)
     {
         $document = Document::where('user_id', $user_id)->firstOrFail();
 
-        switch ($type) {
+        switch ($category) {
             case 'ktp':
-                $filePath = $document->ktp;
+                $filePath = $document->ktp ? basename($document->ktp) : null;
                 break;
             case 'kk':
-                $filePath = $document->kk;
+                $filePath = $document->kk ? basename($document->kk) : null;
                 break;
             case 'ijazah':
-                $filePath = $document->ijazah;
+                $filePath = $document->ijazah ? basename($document->ijazah) : null;
                 break;
             case 'ak1':
-                $filePath = $document->ak1;
+                $filePath = $document->ak1 ? basename($document->ak1) : null;
                 break;
             default:
                 abort(404, 'Dokumen tidak ditemukan');
         }
 
-        $path = storage_path('app/public/' . $filePath);
+        $path = storage_path("app/private/documents/{$category}/{$filePath}");
 
         if (!file_exists($path)) {
             abort(404, 'File tidak ditemukan.');
@@ -330,10 +330,10 @@ class ParticipantController extends Controller
 
         $participant = User::findOrFail($id);
 
-        Revision::create([
-            'user_id' => $participant->id,
-            'revisi_message' => $request->revisi_message,
-        ]);
+        Revision::updateOrCreate(
+            ['user_id' => $participant->id], // Kondisi untuk cek apakah data sudah ada
+            ['revisi_message' => $request->revisi_message] // Data yang akan diperbarui atau ditambahkan
+        );
 
         return redirect()->back()->with('success', 'Pesan revisi berhasil dikirim ke ' . $participant->profile->name);
     }
