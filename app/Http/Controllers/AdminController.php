@@ -80,13 +80,28 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('pencakerCount'));
     }
 
-    public function accountParticipants()
+    public function accountParticipants(Request $request)
     {
-        // Mengambil semua data user dari database
-        $users = User::all();
+        // Ambil nilai pencarian dari input
+        $search = $request->input('search');
 
-        // Mengirim data user ke view account participants
-        return view('admin.account-participant', compact('users'));
+        // Query untuk mengambil user dengan fitur pencarian
+        $users = User::query();
+
+        if ($search) {
+            $users->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%$search%")
+                      ->orWhere('email', 'LIKE', "%$search%");
+            });
+        }
+
+        // Ambil data dengan pagination (10 per halaman)
+        $users = $users->paginate(10);
+
+        return view('admin.account-participant', [
+            'users' => $users,
+            'search' => $search, // Agar input tetap ada setelah pencarian
+        ]);
     }
 
     public function changeRole($id)

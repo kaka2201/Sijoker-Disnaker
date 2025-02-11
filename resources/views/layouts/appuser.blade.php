@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
@@ -25,91 +26,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title', 'Your App') ~ Platform Pelatihan Kerja Disnaker</title>
-
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400;
-            color: #333;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-            cursor: not-allowed;
-        }
-
-        .card {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-img-top {
-            width: 100%;
-            height: auto; /* Agar gambar tidak terdistorsi */
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .dropdown-menu {
-            min-width: 150px;
-            right: 0;
-            left: auto;
-        }
-
-        .dropdown-item {
-            padding: 10px 20px;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        .profile-image {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover; /* memastikan gambar memenuhi area bulat */
-        }
-
-        .profile-button {
-            background-color: transparent;
-            border: none;
-            padding: 0;
-            display: flex;
-            align-items: center;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        .topbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: #343a40;
-            color: white;
-            z-index: 1030;
-            transition: transform 0.3s ease-in-out;
-        }
-        .navbar {
-            position: fixed;
-            width: 100%;
-            top: 40px;
-            background: white;
-            z-index: 1040;
-            transition: top 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .content {
-            margin-top: 120px; /* Agar konten tidak tertutup navbar */
-        }
-    </style>
     @stack('styles')
 </head>
 
@@ -153,6 +74,7 @@
                     <a href="{{ url('about') }}" class="nav-item nav-link {{ Request::is('about') ? 'active text-primary' : '' }}">About</a>
                     <a href="{{ route('courses.index') }}" class="nav-item nav-link {{ Request::routeIs('courses.index') ? 'active text-primary' : '' }}">Courses</a>
                     <a href="{{ url('contact') }}" class="nav-item nav-link {{ Request::is('contact') ? 'active text-primary' : '' }}">Contact</a>
+                    <a href="{{ route('complaints.index') }}" class="nav-item nav-link {{ Request::is('complaints') ? 'active text-primary' : '' }}">Complaints</a>
                 </div>
             </div>
             <div class="d-none d-lg-block">
@@ -224,11 +146,11 @@
                 <div class="col-md-4 mb-5">
                     <h3 class="text-white mb-4">Quick Links</h3>
                     <div class="d-flex flex-column justify-content-start">
-                        <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Privacy Policy</a>
+                        {{-- <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Privacy Policy</a>
                         <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Terms & Condition</a>
-                        <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Regular FAQs</a>
-                        <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Help & Support</a>
-                        <a class="text-white-50" href="#"><i class="fa fa-angle-right mr-2"></i>Contact</a>
+                        <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Regular FAQs</a> --}}
+                        <a class="text-white-50 mb-2" href="{{ route('complaints.index') }}"><i class="fa fa-angle-right mr-2"></i>Complaint</a>
+                        <a class="text-white-50" href="{{ url('contact') }}"><i class="fa fa-angle-right mr-2"></i>Contact</a>
                     </div>
                 </div>
             </div>
@@ -241,7 +163,7 @@
                     <p class="m-0">Copyright &copy; <a class="text-white">Disnaker Kota Batu</a>. All Rights Reserved.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-right">
-                    <p class="m-0">Designed by <a class="text-white">MGITUMM21</a></p>
+                    <p class="m-0">Develop by <a class="text-white">MGITUMM21</a></p>
                 </div>
             </div>
         </div>
@@ -261,42 +183,9 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let topbar = document.querySelector(".topbar");
-            let navbar = document.querySelector(".navbar");
-            let lastScrollY = window.scrollY;
-            let ticking = false;
-
-            function updateNavbar() {
-                if (window.scrollY > 50) {
-                    topbar.style.transform = "translateY(-100%)";
-                    navbar.style.top = "0";
-                    navbar.style.boxShadow = "0px 4px 10px rgba(0, 0, 0, 0.2)";
-                } else {
-                    topbar.style.transform = "translateY(0)";
-                    navbar.style.top = "40px";
-                    navbar.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.1)";
-                }
-                ticking = false;
-            }
-
-            window.addEventListener("scroll", function () {
-                lastScrollY = window.scrollY;
-                if (!ticking) {
-                    requestAnimationFrame(updateNavbar);
-                    ticking = true;
-                }
-            });
-
-            // Smooth Scroll for Back to Top button
-            document.querySelector(".back-to-top").addEventListener("click", function (e) {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: "smooth" });
-            });
-        });
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/home.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>

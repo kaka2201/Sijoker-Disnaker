@@ -65,4 +65,12 @@ class User extends Authenticatable
         return $this->hasMany(Registration::class, 'user_id');
     }
 
+    public function likes()
+    {
+        return $this->hasMany(ComplaintDetail::class);
+    }
+    public function hasLiked(Complaint $complaint)
+    {
+        return $this->likes()->where('complaint_id', $complaint->id)->exists();
+    }
 }

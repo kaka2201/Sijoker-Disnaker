@@ -24,144 +24,47 @@
                     <!-- Form untuk dokumen -->
                     <form action="{{ route('profile.documents.storeOrUpdate') }}" method="POST" enctype="multipart/form-data" id="documentForm">
                         @csrf
-
-                        <!-- KTP -->
-                        <div class="mb-3 row">
-                            <label for="ktp" class="form-label col-md-8">KTP (Wajib)
-                                <span class="badge 
-                                    @if($document && $document->ktp_status == 'confirmed') bg-success
-                                    @elseif($document && $document->ktp_status == 'rejected') bg-danger
-                                    @elseif($document && $document->ktp_status == 'pending') bg-warning
-                                    @else bg-secondary @endif">
-                                    @if($document && $document->ktp_status == 'confirmed')
-                                        Terverifikasi
-                                    @elseif($document && $document->ktp_status == 'rejected')
-                                        Tidak Sesuai
-                                    @elseif($document && $document->ktp_status == 'pending')
-                                        Menunggu Konfirmasi
-                                    @else
-                                        Silahkan Upload Dokumen
+                        
+                        @php
+                            $documents = [
+                                'ktp' => 'KTP',
+                                'kk' => 'Kartu Keluarga',
+                                'ijazah' => 'Ijazah Terakhir',
+                                'ak1' => 'AK1'
+                            ];
+                        @endphp
+                    
+                        @foreach($documents as $key => $label)
+                            <div class="mb-3 row">
+                                <label for="{{ $key }}" class="form-label col-md-8">{{ $label }} (Wajib)
+                                    @php $status = $document->{$key . '_status'} ?? 'none'; @endphp
+                                    <span class="badge bg-{{ $status == 'confirmed' ? 'success' : ($status == 'rejected' ? 'danger' : ($status == 'pending' ? 'warning' : 'secondary')) }}">
+                                        {{ $status == 'confirmed' ? 'Terverifikasi' : ($status == 'rejected' ? 'Tidak Sesuai' : ($status == 'pending' ? 'Menunggu Konfirmasi' : 'Silahkan Upload Dokumen')) }}
+                                    </span>
+                                </label>
+                                <div class="col-md-12">
+                                    <input type="file" class="form-control" id="{{ $key }}" name="{{ $key }}"`  
+                                        @if(in_array($status, ['confirmed', 'pending'])) disabled @endif onchange="checkFileSize(this)">
+                                    <small class="text-muted">Ukuran maksimum 1MB (format: pdf)</small>
+                                    @if(!empty($document->{$key}))
+                                        <p class="text-muted">Dokumen saat ini: {{ basename($document->{$key}) }}</p>
                                     @endif
-                                </span>
-                            </label>
-                            <div class="col-md-12">
-                                <input type="file" class="form-control" id="ktp" name="ktp" 
-                                    @if($document && in_array($document->ktp_status, ['confirmed', 'pending'])) disabled @endif
-                                    onchange="checkFileSize(this)">
-                                <small class="text-muted">Ukuran maksimum 1MB (format: pdf)</small>
-                                @if($document && $document->ktp)
-                                    <p class="text-muted">Dokumen saat ini: {{ basename($document->ktp) }}</p>
-                                @endif
+                                </div>
                             </div>
+                        @endforeach
+                    
+                        @if($document && $document->messages)
+                        <div class="alert alert-warning">
+                            <strong>Pesan dari Admin:</strong>
+                            <p>{{ $document->messages }}</p>
                         </div>
-
-                        <!-- Kartu Keluarga -->
-                        <div class="mb-3 row">
-                            <label for="kk" class="form-label col-md-8">Kartu Keluarga (Wajib)
-                                <span class="badge 
-                                    @if($document && $document->kk_status == 'confirmed') bg-success
-                                    @elseif($document && $document->kk_status == 'rejected') bg-danger
-                                    @elseif($document && $document->kk_status == 'pending') bg-warning
-                                    @else bg-secondary @endif">
-                                    @if($document && $document->kk_status == 'confirmed')
-                                        Terverifikasi
-                                    @elseif($document && $document->kk_status == 'rejected')
-                                        Tidak Sesuai
-                                    @elseif($document && $document->kk_status == 'pending')
-                                        Menunggu Konfirmasi
-                                    @else
-                                        Silahkan Upload Dokumen
-                                    @endif
-                                </span>
-                            </label>
-                            <div class="col-md-12">
-                                <input type="file" class="form-control" id="kk" name="kk" 
-                                    @if($document && in_array($document->kk_status, ['confirmed', 'pending'])) disabled @endif
-                                    onchange="checkFileSize(this)">
-                                <small class="text-muted">Ukuran maksimum 1MB (format: pdf)</small>
-                                @if($document && $document->kk)
-                                    <p class="text-muted">Dokumen saat ini: {{ basename($document->kk) }}</p>
-                                @endif
-                            </div>
-                        </div>
-
-                        <!-- Ijazah -->
-                        <div class="mb-3 row">
-                            <label for="ijazah" class="form-label col-md-8">Ijazah Terakhir (Wajib)
-                                <span class="badge 
-                                    @if($document && $document->ijazah_status == 'confirmed') bg-success
-                                    @elseif($document && $document->ijazah_status == 'rejected') bg-danger
-                                    @elseif($document && $document->ijazah_status == 'pending') bg-warning
-                                    @else bg-secondary @endif">
-                                    @if($document && $document->ijazah_status == 'confirmed')
-                                        Terverifikasi
-                                    @elseif($document && $document->ijazah_status == 'rejected')
-                                        Tidak Sesuai
-                                    @elseif($document && $document->ijazah_status == 'pending')
-                                        Menunggu Konfirmasi
-                                    @else
-                                        Silahkan Upload Dokumen
-                                    @endif
-                                </span>
-                            </label>
-                            <div class="col-md-12">
-                                <input type="file" class="form-control" id="ijazah" name="ijazah" 
-                                    @if($document && in_array($document->ijazah_status, ['confirmed', 'pending'])) disabled @endif
-                                    onchange="checkFileSize(this)">
-                                <small class="text-muted">Ukuran maksimum 1MB (format: pdf)</small>
-                                @if($document && $document->ijazah)
-                                    <p class="text-muted">Dokumen saat ini: {{ basename($document->ijazah) }}</p>
-                                @endif
-                            </div>
-                        </div>
-
-                        <!-- AK1 -->
-                        <div class="mb-3 row">
-                            <label for="ak1" class="form-label col-md-8">AK1 (Wajib)
-                                <span class="badge 
-                                    @if($document && $document->ak1_status == 'confirmed') bg-success
-                                    @elseif($document && $document->ak1_status == 'rejected') bg-danger
-                                    @elseif($document && $document->ak1_status == 'pending') bg-warning
-                                    @else bg-secondary @endif">
-                                    @if($document && $document->ak1_status == 'confirmed')
-                                        Terverifikasi
-                                    @elseif($document && $document->ak1_status == 'rejected')
-                                        Tidak Sesuai
-                                    @elseif($document && $document->ak1_status == 'pending')
-                                        Menunggu Konfirmasi
-                                    @else
-                                        Silahkan Upload Dokumen
-                                    @endif
-                                </span>
-                            </label>
-                            <div class="col-md-12">
-                                <input type="file" class="form-control" id="ak1" name="ak1" 
-                                    @if($document && in_array($document->ak1_status, ['confirmed', 'pending'])) disabled @endif
-                                    onchange="checkFileSize(this)">
-                                <small class="text-muted">Ukuran maksimum 1MB (format: pdf)</small>
-                                @if($document && $document->ak1)
-                                    <p class="text-muted">Dokumen saat ini: {{ basename($document->ak1) }}</p>
-                                @endif
-                            </div>
-                            <div class="col-md-12 mt-1">
-                                <small class="text-muted">Untuk Mengurus AK1 Perlu Datang Langsung ke MPP Disnaker</small>
-                            </div>
-                        </div>
-
-                        <!-- Pesan Revisi -->
-                        @if($revision && $revision->revisi_message)
-                            <div class="alert alert-danger">
-                                <strong>Pesan Revisi dari Admin:</strong>
-                                <p>{{ $revision->revisi_message }}</p>
-                            </div>
                         @else
                             <div class="alert alert-secondary">
-                                <strong>Pesan Revisi dari Admin:</strong>
+                                <strong>Pesan dari Admin:</strong>
                                 <p>Belum ada pesan</p>
                             </div>
                         @endif
-
-                        <!-- Tombol Simpan -->
+                    
                         <div class="d-flex justify-content-end mt-4">
                             <button type="submit" class="btn btn-primary" id="saveButton">
                                 <i class="fas fa-save me-1"></i> Simpan
@@ -173,7 +76,8 @@
         </div>
     </div>
 </div>
-
+@endsection
+@push('scripts')
 <script>
     // Fungsi untuk cek ukuran file
     function checkFileSize(input) {
@@ -186,4 +90,4 @@
         }
     }
 </script>
-@endsection
+@endpush

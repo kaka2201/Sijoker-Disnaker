@@ -11,7 +11,7 @@ class Document extends Model
 
     protected $fillable = [
         'user_id', 'ktp', 'kk', 'ijazah', 'ak1', 
-        'ktp_status', 'kk_status', 'ijazah_status', 'ak1_status'
+        'ktp_status', 'kk_status', 'ijazah_status', 'ak1_status', 'messages'
     ];
 
     // Relasi ke User

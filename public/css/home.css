@@ -1,0 +1,77 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    color: #333;
+}
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-img-top {
+    width: 100%;
+    height: auto; /* Agar gambar tidak terdistorsi */
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.dropdown-menu {
+    min-width: 150px;
+    right: 0;
+    left: auto;
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover; /* memastikan gambar memenuhi area bulat */
+}
+
+.profile-button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+html {
+    scroll-behavior: smooth;
+}
+.topbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #343a40;
+    color: white;
+    z-index: 1030;
+    transition: transform 0.3s ease-in-out;
+}
+.navbar {
+    position: fixed;
+    width: 100%;
+    top: 40px;
+    background: white;
+    z-index: 1040;
+    transition: top 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.content {
+    margin-top: 120px; /* Agar konten tidak tertutup navbar */
+}

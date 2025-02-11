@@ -23,6 +23,7 @@ return new class extends Migration
             $table->enum('kk_status', ['pending', 'confirmed', 'rejected'])->default('pending');
             $table->enum('ijazah_status', ['pending', 'confirmed', 'rejected'])->default('pending');
             $table->enum('ak1_status', ['pending', 'confirmed', 'rejected'])->default('pending');
+            $table->text('messages')->nullable();
             $table->timestamps();
         
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

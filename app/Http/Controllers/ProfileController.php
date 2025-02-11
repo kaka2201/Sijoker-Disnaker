@@ -120,25 +120,30 @@ class ProfileController extends Controller
         $document = Document::firstOrNew(['user_id' => $user->id]);
 
         if ($request->hasFile('ktp')) {
-            $ktpFile = $request->file('ktp')->store('documents', 'public');
+            $file = $request->file('ktp');
+            $ktpFile = $this->storeWithNumbering('documents/ktp', 'ktp_' . $user->name, $file, 'local');
             $document->ktp = $ktpFile;
             $document->ktp_status = 'pending';
         }
 
         if ($request->hasFile('kk')) {
-            $kkFile = $request->file('kk')->store('documents', 'public');
+            $file = $request->file('kk');
+            $this->storeWithNumbering('documents/kk', 'kk_' . $user->name, $file, 'local');
+            $kkFile = 'kk_' . $user->name, $file;
             $document->kk = $kkFile;
             $document->kk_status = 'pending';
         }
 
         if ($request->hasFile('ijazah')) {
-            $ijazahFile = $request->file('ijazah')->store('documents', 'public');
+            $file = $request->file('ijazah');
+            $ijazahFile = $this->storeWithNumbering('documents/ijazah', 'ijazah_' . $user->name, $file, 'local');
             $document->ijazah = $ijazahFile;
             $document->ijazah_status = 'pending';
         }
 
         if ($request->hasFile('ak1')) {
-            $ak1File = $request->file('ak1')->store('documents', 'public');
+            $file = $request->file('ak1');
+            $ak1File = $this->storeWithNumbering('documents/ak1', 'ak1_' . $user->name, $file, 'local');
             $document->ak1 = $ak1File;
             $document->ak1_status = 'pending';
         }
@@ -146,6 +151,21 @@ class ProfileController extends Controller
         $document->save();
 
         return redirect()->route('profile.documents')->with('success', 'Dokumen berhasil diunggah dan menunggu konfirmasi.');
+    }
+    
+    private function storeWithNumbering($folder, $baseName, $file, $disk)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $counter = 1;
+        $fileName = "{$baseName}.{$extension}";
+
+        // Cek apakah file sudah ada, jika ya, tambahkan nomor urut
+        while (Storage::disk($disk)->exists("{$folder}/{$fileName}")) {
+            $fileName = "{$baseName}_{$counter}.{$extension}";
+            $counter++;
+        }
+
+        return $file->storeAs($folder, $fileName, $disk);
     }
 
     // Mengubah password

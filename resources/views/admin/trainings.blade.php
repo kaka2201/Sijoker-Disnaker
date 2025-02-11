@@ -3,7 +3,7 @@
 @section('title', 'Manajemen Pelatihan')
 
 @section('content')
-<div class="container my-5">
+<div class="container-fluid mx-4 my-5">
     <h1 class="mb-4 text-center">Manajemen Pelatihan</h1>
 
     <!-- Tombol untuk menambah pelatihan baru -->
@@ -19,7 +19,7 @@
     @endif
 
     <div class="row">
-        @foreach($trainings as $training)
+        @forelse($trainings as $training)
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm h-100 border-0">
                     <!-- Gambar dari database atau placeholder -->
@@ -41,10 +41,10 @@
                         </p>
 
                         <div class="mt-auto">
-                            <a href="{{ route('trainings.edit', $training->id) }}" class="btn btn-warning btn-sm me-1">
+                            <a href="{{ route('trainings.edit', $training->id) }}" class="btn text-white btn-warning btn-sm me-1">
                                 <i class="fa fa-edit"></i> Edit
                             </a>
-                            <a href="{{ route('trainings.participants', $training->id) }}" class="btn btn-info btn-sm me-1">
+                            <a href="{{ route('trainings.participants', $training->id) }}" class="btn text-white btn-info btn-sm me-1">
                                 <i class="fa fa-users"></i> Peserta
                             </a>
                             <form action="{{ route('trainings.destroy', $training->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus pelatihan ini?');">
@@ -58,7 +58,11 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="text-center text-muted mb-4">
+                <h5>Tidak ada Data Trainings<h5>
+            </div>
+        @endforelse
     </div>
 
     <!-- Pagination -->

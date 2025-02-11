@@ -26,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($users as $user)
+                        @forelse($users as $user)
                             {{-- @if ($user->hasRole('user')) --}}
                             <tr>
                                 <td>{{ $user->id }}</td>
@@ -52,7 +52,11 @@
                                 </td>
                             </tr>
                             {{-- @endif --}}
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">Tidak ada peserta akun ditemukan</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

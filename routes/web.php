@@ -5,6 +5,7 @@ use App\Http\Controllers\{
     AuthController, ProfileController, AdminController, 
     ParticipantController, TrainingController, CourseController, HomeController
 };
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::view('/about', 'about')->name('about');
@@ -48,6 +49,16 @@ Route::middleware(['auth', 'role:super_admin|admin'])->prefix('admin')->name('ad
     Route::get('/withdrawals', [AdminController::class, 'withdrawalRequests'])->name('withdrawals');
     Route::post('/withdrawals/{id}/verify', [AdminController::class, 'verifyWithdrawal'])->name('withdrawals.verify');
     Route::post('/withdrawals/{id}/reject', [AdminController::class, 'rejectWithdrawal'])->name('withdrawals.reject');
+    
+    Route::get('/admin/complaints', [ComplaintController::class, 'admin'])->name('complaints');
+    Route::get('/complaints/{id}/show', [ComplaintController::class, 'show'])->name('complaints.show');
+    Route::post('/complaints/{id}/answer', [ComplaintController::class,'answer'])->name('complaints.answer');
+    Route::delete('/complaints/{id}/destroy', [ComplaintController::class, 'destroy'])->name('complaints.destroy');
+    
+    Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+    Route::get('/documents/{filename}/{category}', [DocumentController::class, 'showFile'])->name('documents.show');
+    Route::patch('/documents/{document}/update-status', [DocumentController::class, 'updateStatusAjax'])->name('documents.updateStatus');
+    Route::patch('/documents/{id}/message', [DocumentController::class, 'message'])->name('documents.message');
 });
 
 Route::middleware(['auth', 'role:user'])->get('/user/dashboard', fn () => view('user.dashboard'))->name('user.dashboard');
@@ -88,4 +99,11 @@ Route::middleware('auth')->prefix('pelatihan')->name('pelatihan.')->controller(T
     Route::get('/{id}/preview',  'preview')->name('preview');
     Route::post('/{id}/daftar',  'register')->name('register');
     Route::get('/check-completion', 'checkProfileCompletion')->name('checkCompletion');
+});
+
+Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
+Route::get('/complaints/{id}', [ComplaintController::class, 'show'])->name('complaints.show');
+Route::middleware(['auth'])->name('complaints.')->controller(ComplaintController::class)->group(function () {
+    Route::post('/complaints',  'store')->name('store');
+    Route::post('/complaints/{id}/like', 'like')->name('like');
 });

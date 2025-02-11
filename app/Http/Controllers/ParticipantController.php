@@ -23,8 +23,8 @@ class ParticipantController extends Controller
             });
 
         // Filter berdasarkan universal search di semua kolom
-        if ($request->filled('universal_search')) {
-            $search = $request->universal_search;
+        if ($request->filled('search')) {
+            $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('email', 'like', '%' . $search . '%')
                   ->orWhereHas('profile', function ($q) use ($search) {

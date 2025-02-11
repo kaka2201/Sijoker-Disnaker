@@ -13,7 +13,7 @@
                         <h4 class="card-title mb-3">Selamat Datang, {{ Auth::user()->name }} 🎉</h4>
                         <p class="card-text" id="real-time-clock"></p>
                     </div>
-                    <div class="mt-4">
+                    <div>
                         <a href="#" class="btn btn-light btn-sm">View Profile</a>
                     </div>
                 </div>
