@@ -89,7 +89,6 @@ Route::middleware(['auth', 'role:super_admin|admin'])->prefix('admin/participant
     Route::post('/document/reject/{id}/{type}','rejectDocument')->name('document.reject');
     Route::get('/{user_id}/confirm-delete','confirmDelete')->name('confirmDelete');
     Route::post('/participants/{user_id}/delete','deleteParticipant')->name('delete');
-    Route::get('/participants','index')->name('participant_management');
     Route::get('/participant/{id}','show')->name('participant.show');
     Route::delete('/participant/{id}/delete','destroy')->name('participant.destroy');
     Route::get('/view-document/{userId}/{category}','viewDocument')->name('view.document');

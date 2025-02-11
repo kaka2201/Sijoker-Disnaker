@@ -3,7 +3,7 @@
 @section('title', 'Manajemen Peserta Pelatihan')
 
 @section('content')
-<div class="container my-5">
+<div class="container mx-4 my-5">
     <h1>Manajemen Peserta untuk Pelatihan: {{ $training->title }}</h1>
 
     <!-- Form Pencarian Universal -->
@@ -22,7 +22,7 @@
     </form>
 
     <!-- Tombol Export CSV -->
-    <form action="{{ route('participant.export', $training->id) }}" method="GET">
+    <form action="{{ route('admin.participant.export', $training->id) }}" method="GET">
         <!-- Kirim parameter filter yang aktif -->
         <input type="hidden" name="universal_search" value="{{ request('universal_search') }}">
         <button type="submit" class="btn btn-success mb-3">
@@ -53,7 +53,7 @@
             <tr>
                 <td>{{ $participant->profile->name ?? 'N/A' }}</td>
                 <td>{{ $participant->email }}</td>
-                <td>{{ substr($participant->profile->nik ?? 'N/A', 0, 5) . str_repeat('*', strlen($participant->profile->nik ?? '') - 5) }}</td>
+                <td>{{ substr($participant->profile->nik ?? 'N/A', 0, 5) . str_repeat('*', max(0, strlen($participant->profile->nik ?? '') - 5)) }}</td>
                 <td>{{ $participant->profile->ttl ?? 'N/A' }}</td>
                 <td>
                     @if($participant->profile->ttl)
@@ -74,7 +74,7 @@
                 <td>{{ $participant->profile->pendidikan ?? 'N/A' }}</td>
                 <td>{{ $participant->profile->nomor ?? 'N/A' }}</td>
                 <td>
-                    <a href="{{ route('participant.show', $participant->id) }}" class="btn btn-info btn-sm">
+                    <a href="{{ route('admin.participant.show', $participant->id) }}" class="btn btn-info btn-sm">
                         <i class="fa fa-eye"></i> Detail
                     </a>
                 </td>

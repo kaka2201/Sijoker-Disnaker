@@ -92,6 +92,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{ $participants->links() }}
             </div>
         </div>
     </div>

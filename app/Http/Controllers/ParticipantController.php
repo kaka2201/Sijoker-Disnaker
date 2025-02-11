@@ -42,7 +42,7 @@ class ParticipantController extends Controller
         }
 
         // Eksekusi query untuk mendapatkan data peserta
-        $participants = $query->get();
+        $participants = $query->paginate(10);
 
         return view('admin.participants', [
             'participants' => $participants,

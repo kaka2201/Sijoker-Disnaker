@@ -23,7 +23,7 @@
         <a class="navbar-brand mx-3" href="#">DISNAKER</a>
         @php
             $action = match($currentPage ?? '') {
-                'peserta' => route('admin.participant.participant_management'),
+                'peserta' => route('admin.participant.index'),
                 'dokumen' => route('admin.documents.index'),
                 'pelatihan' => route('admin.training_management'),
                 'akun' => route('admin.account_participants'),
@@ -55,7 +55,7 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <a href="{{ route('admin.dashboard') }}"><i class="fas fa-home"></i> <span>Dashboard</span></a>
-        <a href="{{ route('admin.participant.participant_management') }}"><i class="fas fa-users"></i> <span>Peserta</span></a>
+        <a href="{{ route('admin.participant.index') }}"><i class="fas fa-users"></i> <span>Peserta</span></a>
         <a href="{{ route('admin.documents.index') }}"><i class="fas fa-file-text"></i> <span>Dokumen</span></a>
         <a href="{{ route('admin.training_management') }}"><i class="fas fa-chalkboard-teacher"></i> <span>Pelatihan</span></a>
         <a href="{{ route('admin.account_participants') }}"><i class="fas fa-user-cog"></i> <span>Akun</span></a>

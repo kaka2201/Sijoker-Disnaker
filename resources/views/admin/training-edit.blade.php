@@ -3,7 +3,7 @@
 @section('title', 'Edit Pelatihan')
 
 @section('content')
-<div class="container my-5">
+<div class="container mx-4 my-5">
     <h1>Edit Pelatihan</h1>
 
     <form action="{{ route('trainings.update', $training->id) }}" method="POST" enctype="multipart/form-data">
