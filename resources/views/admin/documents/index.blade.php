@@ -56,8 +56,8 @@
                                     <button class="btn btn-warning text-white btn-message" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#messageModal" 
-                                        data-id="{{ $document->id }}"
-                                        data-message="{{ $document->messages }}">
+                                        data-id="{{ $document->user->id }}"
+                                        data-message="{{ $document->user->revisi->revisi_message }}">
                                         <i class="fas fa-message"></i>
                                     </button>
                                 </td>

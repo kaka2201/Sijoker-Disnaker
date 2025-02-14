@@ -90,6 +90,33 @@ class AuthController extends Controller
             return redirect('/');
         }
     }
+    public function store(Request $request)
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'role' => 'required|in:user,admin,super_admin',
+        ]);
+    
+        // Membuat user baru
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+        
+        // Assign role ke user
+        $user->assignRole($request->role);
+    
+        // Membuat profile
+        Profile::create([
+            'user_id' => $user->id,
+            'name' => $user->name,
+        ]);
+            return redirect()->back()->with('success', "Berhasil menambahkan user.");
+    }
 
     // Proses logout
     public function logout(Request $request)

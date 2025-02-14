@@ -37,7 +37,8 @@
         </form>
 
         <div class="profile-icon dropdown">
-            <img src="{{ Auth::user()->profile && Auth::user()->profile->foto ? asset('storage/' . Auth::user()->profile->foto) : asset('image/default_profile.jpg') }}" alt="Profile Image" class="dropdown-toggle" data-bs-toggle="dropdown">
+            <img src="{{ Auth::user()->profile && Auth::user()->profile->foto ? asset('storage/' . Auth::user()->profile->foto) : asset('image/default_profile.jpg') }}" alt="Profile Image" class="dropdown-toggle mx-2" data-bs-toggle="dropdown">
+            <span class="dropdown-toggle text-white" data-bs-toggle="dropdown">{{ Auth::user()->profile->name }}</span>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profil</a></li>
                 <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Pengaturan</a></li>

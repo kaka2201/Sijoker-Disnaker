@@ -10,22 +10,19 @@ use App\Models\Registration;
 use App\Models\DeletionMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log; 
 
 class ParticipantController extends Controller
 {
-    // Menampilkan daftar peserta
     public function index(Request $request)
     {
-        $query = User::with('profile')
-            ->whereHas('roles', function ($query) {
-                $query->where('name', 'user');
-            });
+        // Query peserta dengan profil dan peran 'user'
+        $query = User::with('profile')->whereHas('roles', function ($q) {
+            $q->where('name', 'user');
+        });
 
-        // Filter berdasarkan universal search di semua kolom
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('email', 'like', '%' . $search . '%')
                   ->orWhereHas('profile', function ($q) use ($search) {
                       $q->where('name', 'like', '%' . $search . '%')
@@ -41,12 +38,59 @@ class ParticipantController extends Controller
             });
         }
 
-        // Eksekusi query untuk mendapatkan data peserta
         $participants = $query->paginate(10);
 
         return view('admin.participants', [
             'participants' => $participants,
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $query = User::with('profile')->whereHas('roles', function ($q) {
+            $q->where('name', 'user');
+        });
+
+        if ($request->filled('universal_search')) {
+            $search = $request->universal_search;
+            $query->where(function ($q) use ($search) {
+                $q->where('email', 'like', '%' . $search . '%')
+                  ->orWhereHas('profile', function ($q) use ($search) {
+                      $q->where('name', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        $participants = $query->get();
+
+        $fileName = 'participants_' . date('Y-m-d_H-i-s') . '.csv';
+        $headers = [
+            "Content-Type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+        ];
+
+        $callback = function () use ($participants) {
+            $file = fopen('php://output', 'w');
+
+            fputcsv($file, ['Name', 'Email', 'NIK', 'TTL', 'Gender', 'Desa', 'Pendidikan', 'No. Telepon']);
+
+            foreach ($participants as $participant) {
+                fputcsv($file, [
+                    $participant->profile->name ?? 'N/A',
+                    $participant->email,
+                    $participant->profile->nik ?? 'N/A',
+                    $participant->profile->ttl ?? 'N/A',
+                    $participant->profile->gender ?? 'N/A',
+                    $participant->profile->desa ?? 'N/A',
+                    $participant->profile->pendidikan ?? 'N/A',
+                    $participant->profile->nomor ?? 'N/A',
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     // Menampilkan halaman detail peserta
@@ -272,53 +316,6 @@ class ParticipantController extends Controller
         $document->save();
 
         return redirect()->back()->with('success', 'Dokumen berhasil diperbarui dan menunggu konfirmasi.');
-    }
-
-    // Ekspor data peserta ke CSV
-    public function export(Request $request)
-    {
-        $query = User::with('profile')->where('role', 'user');
-
-        if ($request->filled('universal_search')) {
-            $search = $request->universal_search;
-            $query->where(function($q) use ($search) {
-                $q->where('email', 'like', '%' . $search . '%')
-                ->orWhereHas('profile', function ($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%');
-                });
-            });
-        }
-
-        $participants = $query->get();
-
-        $fileName = 'participants_' . date('Y-m-d_H-i-s') . '.csv';
-        $headers = [
-            "Content-Type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-        ];
-
-        $callback = function() use ($participants) {
-            $file = fopen('php://output', 'w');
-
-            fputcsv($file, ['Name', 'Email', 'NIK', 'TTL', 'Gender', 'Desa', 'Pendidikan', 'No. Telepon']);
-
-            foreach ($participants as $participant) {
-                fputcsv($file, [
-                    $participant->profile->name ?? 'N/A',
-                    $participant->email,
-                    $participant->profile->nik ?? 'N/A',
-                    $participant->profile->ttl ?? 'N/A',
-                    $participant->profile->gender ?? 'N/A',
-                    $participant->profile->desa ?? 'N/A',
-                    $participant->profile->pendidikan ?? 'N/A',
-                    $participant->profile->nomor ?? 'N/A',
-                ]);
-            }
-
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
     }
 
     // Mengirim pesan revisi

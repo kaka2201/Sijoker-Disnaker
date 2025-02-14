@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\Revision;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
@@ -68,15 +70,14 @@ class DocumentController extends Controller
         $request->validate([
             'messages' => 'required|string',
         ]);
-    
-        // Ambil dokumen berdasarkan ID
-        $document = Document::findOrFail($id);
-        
-        // Update pesan
-        $document->update([
-            'messages' => $request->messages
-        ]);
-    
-        return redirect()->back()->with('success', 'Pesan Berhasil dikirim.');
+
+        $participant = User::findOrFail($id);
+
+        Revision::updateOrCreate(
+            ['user_id' => $participant->id],
+            ['revisi_message' => $request->messages]
+        );
+
+        return redirect()->back()->with('success', 'Pesan revisi berhasil dikirim ke ' . $participant->profile->name);
     }
 }

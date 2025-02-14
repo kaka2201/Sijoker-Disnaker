@@ -103,7 +103,6 @@
     </style>
 @endpush
 @section('content')
-
     <!-- Header Start -->
         <div class="bg-gradient-primary py-5">
             <div class="container d-flex align-items-center justify-content-center py-5">
@@ -114,7 +113,7 @@
                 <!-- Teks Tengah -->
                 <div class="text-container">
                     <h1 class="header-title animate-fade-in">Dinas Tenaga Kerja Kota Batu</h1>
-                    <h2 class="header-subtitle animate-slide-up">Pelatihan Tenaga Kerja Berbasis Kompetensi</h2>
+                    {{-- <h2 class="header-subtitle animate-slide-up">Pelatihan Tenaga Kerja Berbasis Kompetensi</h2> --}}
                 </div>
                 <!-- Logo Disnaker (di kanan) -->
                 <div class="logo-container ml-3">
@@ -122,9 +121,8 @@
                 </div>
             </div>
         </div>
-    <!-- Header End -->
+        <!-- Header End -->
 
-<!-- About Start -->
         <!-- About Start -->
         <div class="bg-about">
             <div class="container py-5 text-center">
@@ -150,10 +148,6 @@
                 </div>
             </div>
         </div>
-<!-- About End -->
-
-<!-- About End -->
-
     <!-- About End -->
 
     <!-- Features Start -->

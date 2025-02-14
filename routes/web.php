@@ -32,6 +32,7 @@ Route::middleware('auth')->prefix('profile')->name('profile.')->controller(Profi
 
 });
 
+Route::post('/admin/account-participants', [AuthController::class,'store'])->middleware(['auth', 'role:super_admin'])->name('admin.account.store');
 Route::middleware(['auth', 'role:super_admin|admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/remove-participant/{userId}', [AdminController::class, 'showRemovalForm'])->name('removeParticipantForm');

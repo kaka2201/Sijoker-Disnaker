@@ -59,6 +59,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profile::class, 'user_id');
     }
+    public function revisi()
+    {
+        return $this->hasOne(Revision::class, 'user_id');
+    }
 
     public function registrations()
     {

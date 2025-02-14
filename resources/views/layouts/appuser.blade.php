@@ -70,11 +70,11 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mx-auto py-0">
-                    <a href="{{ url('/') }}" class="nav-item nav-link {{ Request::is('/') ? 'active text-primary' : '' }}">Home</a>
-                    <a href="{{ url('about') }}" class="nav-item nav-link {{ Request::is('about') ? 'active text-primary' : '' }}">About</a>
-                    <a href="{{ route('courses.index') }}" class="nav-item nav-link {{ Request::routeIs('courses.index') ? 'active text-primary' : '' }}">Courses</a>
-                    <a href="{{ url('contact') }}" class="nav-item nav-link {{ Request::is('contact') ? 'active text-primary' : '' }}">Contact</a>
-                    <a href="{{ route('complaints.index') }}" class="nav-item nav-link {{ Request::is('complaints') ? 'active text-primary' : '' }}">Complaints</a>
+                    <a href="{{ url('/') }}" class="nav-item nav-link {{ Request::is('/') ? 'active text-primary' : '' }}">Beranda</a>
+                    <a href="{{ url('about') }}" class="nav-item nav-link {{ Request::is('about') ? 'active text-primary' : '' }}">Tentang</a>
+                    <a href="{{ route('courses.index') }}" class="nav-item nav-link {{ Request::routeIs('courses.index') ? 'active text-primary' : '' }}">Pelatihan</a>
+                    <a href="{{ url('contact') }}" class="nav-item nav-link {{ Request::is('contact') ? 'active text-primary' : '' }}">Kontak</a>
+                    <a href="{{ route('complaints.index') }}" class="nav-item nav-link {{ Request::is('complaints') ? 'active text-primary' : '' }}">Pengaduan</a>
                 </div>
             </div>
             <div class="d-none d-lg-block">
@@ -84,11 +84,11 @@
                 @else
                     <div class="dropdown">
                         <button class="profile-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="{{ Auth::user()->profile && Auth::user()->profile->foto ? asset('storage/' . Auth::user()->profile->foto) : asset('image/default_profile.jpg') }}" alt="Profile Image" class="profile-image" style="border: 1px solid #013e7e;">
+                            <img src="{{ Auth::user()->profile && Auth::user()->profile->foto ? asset('storage/' . Auth::user()->profile->foto) : asset('image/default_profile.jpg') }}" alt="Profile Image" class="profile-image mr-2" style="border: 1px solid #013e7e;"> {{ Auth::user()->profile->name }}
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="{{ route('profile.index') }}">Profile</a>
-                            <a class="dropdown-item" href="#">Settings</a>
+                            <a class="dropdown-item" href="{{ route('profile.index') }}">Profil</a>
+                            <a class="dropdown-item" href="#">Pengaturan</a>
                             <div class="dropdown-divider"></div>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: inline;">
                                 @csrf
@@ -119,7 +119,7 @@
                     <p class="m-0">Dinas Tenaga Kerja Kota Batu berkomitmen untuk meningkatkan kualitas dan keterampilan tenaga kerja melalui program pelatihan berkualitas. Kami berupaya menciptakan tenaga kerja yang kompeten dan siap bersaing di pasar kerja.</p>
                 </div>
                 <div class="col-md-6 mb-5">
-                    <h3 class="text-white mb-4">Newsletter</h3>
+                    <h3 class="text-white mb-4">Buletin</h3>
                     <div class="w-100">
                         <div class="input-group">
                             <input type="text" class="form-control border-light" style="padding: 30px;" placeholder="Your Email Address">
@@ -132,7 +132,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4 mb-5">
-                    <h3 class="text-white mb-4">Get In Touch</h3>
+                    <h3 class="text-white mb-4">Hubungi Kami</h3>
                     <p><i class="fa fa-map-marker-alt mr-2"></i>Jl. Panglima Sudirman No.507, Pesanggrahan, Kec. Batu, Kota Batu, Jawa Timur 65313</p>
                     <p><i class="fa fa-phone-alt mr-2"></i>+62 822 2222 2222</p>
                     <p><i class="fa fa-envelope mr-2"></i>info@disnakerkotabatu.go.id</p>
@@ -144,13 +144,13 @@
                     </div>
                 </div>
                 <div class="col-md-4 mb-5">
-                    <h3 class="text-white mb-4">Quick Links</h3>
+                    <h3 class="text-white mb-4">Tautan Cepat</h3>
                     <div class="d-flex flex-column justify-content-start">
                         {{-- <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Privacy Policy</a>
                         <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Terms & Condition</a>
                         <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Regular FAQs</a> --}}
-                        <a class="text-white-50 mb-2" href="{{ route('complaints.index') }}"><i class="fa fa-angle-right mr-2"></i>Complaint</a>
-                        <a class="text-white-50" href="{{ url('contact') }}"><i class="fa fa-angle-right mr-2"></i>Contact</a>
+                        <a class="text-white-50 mb-2" href="{{ route('complaints.index') }}"><i class="fa fa-angle-right mr-2"></i>Pengaduan</a>
+                        <a class="text-white-50" href="{{ url('contact') }}"><i class="fa fa-angle-right mr-2"></i>Kontak</a>
                     </div>
                 </div>
             </div>

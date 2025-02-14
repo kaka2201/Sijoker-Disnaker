@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Complaint;
-use App\Models\ComplaintDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +17,7 @@ class ComplaintController extends Controller
                   ->orWhere('question', 'like', '%' . $request->search . '%');
         }
 
-        $complaints = $query->latest()->paginate(5); // Menampilkan 5 komplain per halaman
+        $complaints = $query->latest()->paginate(5);
         return view('complaints.index', compact('complaints'));
     }
 
@@ -29,14 +28,12 @@ class ComplaintController extends Controller
 
         $complaints = Complaint::query();
 
-        // Filter berdasarkan status
         if ($status === 'not answered') {
             $complaints->where('status', 'pending');
         } elseif ($status === 'answered') {
             $complaints->where('status', 'answered');
         }
 
-        // Filter berdasarkan pencarian (judul atau isi pengaduan)
         if ($search) {
             $complaints->where(function ($query) use ($search) {
                 $query->where('title', 'LIKE', "%$search%")
@@ -46,10 +43,9 @@ class ComplaintController extends Controller
 
         return view('admin.complaints.index', [
             'complaints' => $complaints->paginate(10),
-            'search' => $search, // Untuk mempertahankan input pencarian
+            'search' => $search,
         ]);
     }
-
 
     public function store(Request $request)
     {
@@ -57,27 +53,36 @@ class ComplaintController extends Controller
             'title' => 'required',
             'question' => 'required',
         ]);
-    
+
         if (!Auth::check() || !Auth::user()->hasRole('user')) {
-            return redirect()->back()->with('error', 'You are not authorized to complain.');
+            return redirect()->back()->with('error', 'Anda tidak diizinkan untuk mengajukan Pengaduan.');
         }
-    
+
+        $pendingComplaints = Complaint::where('questioner_id', Auth::id())
+            ->where('status', 'not answered')
+            ->count();
+
+        if ($pendingComplaints >= 3) {
+            return redirect()->back()->with('error', 'Anda tidak dapat mengajukan Pengaduan baru hingga setidaknya satu telah dijawab.');
+        }
+
         Complaint::create([
             'questioner_id' => Auth::id(),
             'title' => $request->title,
             'question' => $request->question,
         ]);
-    
-        return redirect()->back()->with('success', 'Complaint submitted successfully!');
+
+        return redirect()->back()->with('success', 'Pengaduan berhasil diajukan!');
     }
 
     public function show($id, Request $request)
     {
         $layout = $request->input('layout');
         $complaint = Complaint::findOrFail($id);
-        if($layout == 'admin'){
+        
+        if ($layout == 'admin') {
             return view('admin.complaints.show', compact('complaint'));
-        }else{
+        } else {
             return view('complaints.show', compact('complaint'));
         }
     }
@@ -97,10 +102,10 @@ class ComplaintController extends Controller
                 'status' => 'answered',
             ]);
 
-            return redirect()->back()->with('success', 'Complaint answered successfully!');
+            return redirect()->back()->with('success', 'Pengaduan berhasil dijawab!');
         }
 
-        return redirect()->back()->with('error', 'You are not authorized to answer this complaint.');
+        return redirect()->back()->with('error', 'Anda tidak diizinkan untuk menjawab Pengaduan ini.');
     }
 
     public function like($id)
@@ -109,11 +114,9 @@ class ComplaintController extends Controller
         $user = auth()->user();
     
         if ($user->hasLiked($complaint)) {
-            // Jika sudah like, maka unlike
             $user->likes()->where('complaint_id', $id)->delete();
             $complaint->decrement('likes');
         } else {
-            // Jika belum, maka like
             $user->likes()->create(['complaint_id' => $id]);
             $complaint->increment('likes');
         }
@@ -126,13 +129,8 @@ class ComplaintController extends Controller
 
     public function destroy($id)
     {
-        // Cari keluhan berdasarkan ID
         $complaint = Complaint::findOrFail($id);
-
-        // Hapus keluhan
         $complaint->delete();
-
-        // Redirect atau response JSON
-        return redirect()->back()->with('success', 'Complaint deleted successfully.');
+        return redirect()->back()->with('success', 'Pengaduan berhasil dihapus.');
     }
 }
