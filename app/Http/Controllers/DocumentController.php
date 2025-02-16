@@ -75,7 +75,7 @@ class DocumentController extends Controller
 
         Revision::updateOrCreate(
             ['user_id' => $participant->id],
-            ['revisi_message' => $request->messages]
+            ['revisi_message' => $request->messanger]
         );
 
         return redirect()->back()->with('success', 'Pesan revisi berhasil dikirim ke ' . $participant->profile->name);
