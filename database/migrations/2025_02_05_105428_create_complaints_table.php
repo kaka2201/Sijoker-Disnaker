@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('questioner_id');
             $table->string('title');
-            $table->text('question');
             $table->unsignedBigInteger('responsible_id')->nullable();
-            $table->text('answer')->nullable();
             $table->integer('likes')->default(0);
             $table->enum('status', ['not answered', 'answered'])->default('not answered');
             $table->timestamps();

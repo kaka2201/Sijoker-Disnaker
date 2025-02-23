@@ -105,6 +105,7 @@ Route::get('/complaints', [ComplaintController::class, 'index'])->name('complain
 Route::get('/complaints/{id}', [ComplaintController::class, 'show'])->name('complaints.show');
 Route::middleware(['auth'])->name('complaints.')->controller(ComplaintController::class)->group(function () {
     Route::post('/complaints',  'store')->name('store');
+    Route::post('/complaints/{id}/ask', 'store')->name('ask');
     Route::post('/complaints/{id}/like', 'like')->name('like');
 });
 
